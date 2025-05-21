@@ -55,11 +55,6 @@ try {
         $_SESSION['cart'][$product_id] = 1;
     }
 
-    // Update product quantity in database
-    if (!updateProductQuantity($product_id, 1)) {
-        throw new Exception('Không thể cập nhật số lượng sản phẩm!');
-    }
-
     // Calculate total items in cart
     $cart_count = array_sum($_SESSION['cart']);
 
@@ -76,4 +71,4 @@ try {
         'message' => $e->getMessage()
     ]);
 }
-?> 
+?>

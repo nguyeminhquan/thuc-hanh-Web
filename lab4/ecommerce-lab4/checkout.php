@@ -28,9 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$product) {
                 throw new Exception("Sản phẩm không tồn tại!");
             }
-            if ($product['quantity'] < $quantity) {
-                throw new Exception("Sản phẩm {$product['name']} chỉ còn {$product['quantity']} sản phẩm!");
-            }
             $items[] = [
                 'product_id' => $product_id,
                 'quantity' => $quantity,
@@ -47,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Clear cart
         $_SESSION['cart'] = [];
         
-        $success = "Đặt hàng thành công! Mã đơn hàng: " . $order_id;
+        $success = "Đặt hàng thành công!";
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -93,7 +90,7 @@ foreach ($_SESSION['cart'] as $product_id => $quantity) {
                 </ul>
                 <div class="ms-auto">
                     <span class="text-white me-3">Xin chào, <?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                    <a href="cart.php" class="btn btn-warning me-2">Giỏ hàng</a>
+                    <a href="cart.php" class="btn btn-warning me-2">Giỏ hàng <span id="cart-count" class="badge bg-danger"><?php echo array_sum($_SESSION['cart']); ?></span></a>
                     <a href="logout.php" class="btn btn-outline-light">Đăng xuất</a>
                 </div>
             </div>
@@ -112,6 +109,15 @@ foreach ($_SESSION['cart'] as $product_id => $quantity) {
                     <a href="index.php" class="btn btn-primary">Tiếp tục mua sắm</a>
                 </div>
             </div>
+            <script>
+                // Update cart count in the navbar
+                document.addEventListener('DOMContentLoaded', function() {
+                    const cartCountElement = document.getElementById('cart-count');
+                    if (cartCountElement) {
+                        cartCountElement.textContent = '0';
+                    }
+                });
+            </script>
         <?php else: ?>
             <h2>Thanh toán</h2>
             <div class="row">
